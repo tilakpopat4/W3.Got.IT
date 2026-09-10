@@ -1,0 +1,54 @@
+################  STAGE 4 - VARIANT COMPARISON  ################
+
+=== VARIANT A - BINARY (Benign vs Malicious) ===
+accuracy          : 0.9839
+precision (macro) : 0.9611   (weighted): 0.9849
+recall    (macro) : 0.9876   (weighted): 0.9839
+f1-score  (macro) : 0.9737   (weighted): 0.9841
+roc-auc           : 0.9986
+
+--- per-class ---
+              precision    recall  f1-score   support
+
+      Benign       0.92      0.99      0.96     16525
+   Malicious       1.00      0.98      0.99     74604
+
+    accuracy                           0.98     91129
+   macro avg       0.96      0.99      0.97     91129
+weighted avg       0.98      0.98      0.98     91129
+
+--- confusion matrix (rows=true, cols=pred) ---
+labels: 0=Benign, 1=Malicious
+[[16415   110]
+ [ 1356 73248]]
+
+
+=== VARIANT B - MULTICLASS (classes=['Benign', 'Botnet', 'Mirai']) ===
+accuracy          : 0.9201
+precision (macro) : 0.7415   (weighted): 0.9147
+recall    (macro) : 0.7407   (weighted): 0.9201
+f1-score  (macro) : 0.7396   (weighted): 0.9170
+
+--- per-class ---
+              precision    recall  f1-score   support
+
+      Benign       0.93      0.99      0.96     16524
+      Botnet       0.35      0.28      0.31      4336
+       Mirai       0.95      0.94      0.95     63962
+
+    accuracy                           0.92     84822
+   macro avg       0.74      0.74      0.74     84822
+weighted avg       0.91      0.92      0.92     84822
+
+--- confusion matrix (rows=true, cols=pred) ---
+labels: 0=Benign, 1=Botnet, 2=Mirai
+[[16432     2    90]
+ [   31  1230  3075]
+ [ 1283  2299 60380]]
+
+
+================  SUMMARY TABLE  ================
+variant                                    accuracy   f1(weighted)
+Original 6-class (balanced weights)          0.4927         0.5689
+A: Binary Benign-vs-Malicious                0.9839         0.9841
+B: Multiclass clean (Benign/Mirai/Botnet)     0.9201         0.9170

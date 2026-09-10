@@ -1,0 +1,8 @@
+{
+  "Benign": 0,
+  "DarkNexus": 1,
+  "Gafgyt": 2,
+  "Generic": 3,
+  "Mirai": 4,
+  "Unknown": 5
+}

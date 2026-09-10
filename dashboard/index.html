@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OneWayGuard — AI Cyber Threat Detector (Passive Unidirectional Monitor)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+  <!-- Pinned Top Banner: Passive Monitoring Enforcement -->
+  <div class="enforcement-banner">
+    <div class="banner-content">
+      <div class="banner-left">
+        <svg class="shield-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="m9 12 2 2 4-4"/>
+        </svg>
+        <span><strong>PASSIVE MONITORING ONLY</strong> — ONE-WAY UNIDIRECTIONAL DIODE ENFORCED</span>
+      </div>
+      <div class="banner-badges">
+        <span class="banner-badge badge-green">
+          <span class="dot pulse"></span> Hardware Diode Connected
+        </span>
+        <span class="banner-badge badge-blue">
+          Read-Only Sensor Node
+        </span>
+        <span class="banner-badge badge-amber">
+          Active Mitigation: DISABLED
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    
+    <!-- Top Header & Navigation Bar -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="8" fill="#1e64d4"/>
+            <path d="M16 6L24 10V18C24 22.4 16 26 16 26C16 26 8 22.4 8 18V10L16 6Z" stroke="white" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M12 16L15 19L20 13" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">OneWayGuard <span class="tag-version">v3.2</span></h1>
+          <p class="brand-subtitle">AI-Based Detection of Cyber Threats in Unidirectional IP Traffic</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs">
+        <button class="nav-tab active" data-tab="overview">
+          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+          Overview
+        </button>
+        <button class="nav-tab" data-tab="ingest">
+          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          PCAP & Ingest
+        </button>
+        <button class="nav-tab" data-tab="kalman">
+          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l4 4"/></svg>
+          Kalman Anomaly
+        </button>
+        <button class="nav-tab" data-tab="classifier">
+          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg>
+          Threat Classifier
+        </button>
+        <button class="nav-tab" data-tab="coverage">
+          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="M15 3v18"/><path d="M3 9h18"/><path d="M3 15h18"/></svg>
+          Threat Coverage
+        </button>
+        <button class="nav-tab" data-tab="architecture">
+          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><path d="M6 9v12"/></svg>
+          Pipeline & Rules
+        </button>
+      </nav>
+    </header>
+
+    <!-- Global System Status Bar -->
+    <div class="system-status-bar">
+      <div class="status-item">
+        <span class="status-label">Ingest Mode:</span>
+        <span class="status-value highlight-blue" id="sys-ingest-mode">Live Monitoring</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Data Source:</span>
+        <span class="status-value" id="sys-source-name">Unidirectional IP Tap (CICIoT Replay)</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Payload Decryption:</span>
+        <span class="status-value text-muted" id="sys-decryption">Disabled (Metadata Only)</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Active Model:</span>
+        <span class="status-value text-primary" id="sys-active-model">Hardened XGBoost Binary v3</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Model Health:</span>
+        <span class="status-value text-success" id="sys-model-health">● Optimal (F1: 0.990)</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">API Status:</span>
+        <span class="status-value text-success" id="sys-api-status">● Connected (WebSocket/REST)</span>
+      </div>
+    </div>
+
+    <main class="content-area">
+
+      <!-- ========================================== -->
+      <!-- TAB 1: OVERVIEW & DASHBOARD -->
+      <!-- ========================================== -->
+      <div class="tab-content active" id="tab-overview">
+        
+        <!-- KPI Cards Grid -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Total Flows Processed</span>
+              <div class="kpi-icon icon-blue">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              </div>
+            </div>
+            <div class="kpi-value" id="kpi-total-flows">455,304</div>
+            <div class="kpi-subtext">Unidirectional stream ingest</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Flow Ingest Rate</span>
+              <div class="kpi-icon icon-cyan">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              </div>
+            </div>
+            <div class="kpi-value" id="kpi-flows-sec">12,450 <span class="kpi-unit">f/s</span></div>
+            <div class="kpi-subtext">Avg latency: <strong id="kpi-latency">0.14 ms</strong></div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Total Flagged Alerts</span>
+              <div class="kpi-icon icon-amber">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </div>
+            </div>
+            <div class="kpi-value text-amber" id="kpi-total-alerts">3,412</div>
+            <div class="kpi-subtext"><span id="kpi-flag-rate">0.75%</span> flag rate</div>
+          </div>
+
+          <div class="kpi-card border-danger-light">
+            <div class="kpi-header">
+              <span class="kpi-title">Critical Threat Alerts</span>
+              <div class="kpi-icon icon-red">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </div>
+            </div>
+            <div class="kpi-value text-red" id="kpi-critical-alerts">418</div>
+            <div class="kpi-subtext">High Volumetric & C2 events</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Kalman Anomaly Score</span>
+              <div class="kpi-icon icon-purple">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+              </div>
+            </div>
+            <div class="kpi-value" id="kpi-kalman-score">2.41 <span class="badge-status badge-amber">WATCH</span></div>
+            <div class="kpi-subtext">Residual drift threshold: 3.0</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Avg Model Confidence</span>
+              <div class="kpi-icon icon-green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+            </div>
+            <div class="kpi-value text-success" id="kpi-model-confidence">98.6%</div>
+            <div class="kpi-subtext">0.7 XGB + 0.3 Kalman Fusion</div>
+          </div>
+        </div>
+
+        <!-- Main Charts & Live Feed Section -->
+        <div class="grid-2-1">
+          <!-- Flow Ingest Rate & Anomaly Stream Chart -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">Real-Time Flow Rate & Anomaly Score</h2>
+                <p class="card-subtitle">Continuous tracking of packets per second and Kalman bank divergence</p>
+              </div>
+              <div class="chart-legend">
+                <span class="legend-item"><span class="legend-dot dot-blue"></span> Flow Rate (f/s)</span>
+                <span class="legend-item"><span class="legend-dot dot-red"></span> Kalman Anomaly Score</span>
+              </div>
+            </div>
+            <div class="chart-container">
+              <svg id="overview-chart" viewBox="0 0 800 240" preserveAspectRatio="none">
+                <!-- SVG chart dynamically drawn by app.js -->
+              </svg>
+            </div>
+          </div>
+
+          <!-- Active Threat Summary & Alert Feed -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Volumetric Assessment</h2>
+              <span class="badge-blue">Passive Analysis</span>
+            </div>
+            <div class="volumetric-box" id="overview-volumetric-box">
+              <div class="volumetric-title">No Active Volumetric Attack</div>
+              <div class="volumetric-desc">All destination IPs are experiencing normal packet rate distributions. Destination aggregation requires >= 1,000 pps and 3 distinct sources for DDoS.</div>
+            </div>
+
+            <h3 class="subsection-title">Recent Flagged Events</h3>
+            <div class="recent-alerts-list" id="recent-alerts-feed">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ========================================== -->
+      <!-- TAB 2: PCAP & LIVE INGEST -->
+      <!-- ========================================== -->
+      <div class="tab-content" id="tab-ingest">
+        
+        <!-- Controls & Upload Section -->
+        <div class="grid-1-1">
+          
+          <!-- PCAP Upload Box -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">Upload Offline PCAP Capture</h2>
+                <p class="card-subtitle">Inspect flow features, Kalman anomaly metrics, and XGBoost scores from `.pcap` or `.pcapng` files</p>
+              </div>
+            </div>
+            <div class="upload-form">
+              <div class="form-row">
+                <div class="form-group flex-2">
+                  <label class="form-label">PCAP File Selection</label>
+                  <input type="file" id="pcap-file-input" accept=".pcap,.pcapng" class="form-control">
+                </div>
+                <div class="form-group flex-1">
+                  <label class="form-label">Model Selection</label>
+                  <select id="pcap-model-select" class="form-control">
+                    <option value="generic">Generic Hardened Flow Model (XGBoost)</option>
+                    <option value="mythic_c2">Mythic HTTP C2 Model (Poseidon)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Flag Threshold (0.0 to 1.0)</label>
+                  <input type="number" id="pcap-threshold-input" class="form-control" min="0" max="1" step="0.05" value="0.50">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Flow Limit</label>
+                  <input type="number" id="pcap-limit-input" class="form-control" min="100" max="100000" step="1000" value="10000">
+                </div>
+                <div class="form-group align-end">
+                  <button id="btn-run-analysis" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"><path d="M5 3l14 9-14 9V3z"/></svg>
+                    Analyze PCAP
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Network Capture Box -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">Live Interface Tap (Passive Ingest)</h2>
+                <p class="card-subtitle">Sniff incoming diode packet stream via Scapy / Npcap interface</p>
+              </div>
+            </div>
+            <div class="live-form">
+              <div class="form-group">
+                <label class="form-label">Select Capture Interface</label>
+                <div class="input-with-button">
+                  <input type="text" id="live-interface-input" list="dl-interfaces" class="form-control" placeholder="\Device\NPF_{...}">
+                  <datalist id="dl-interfaces"></datalist>
+                </div>
+              </div>
+              <div class="form-row">
+                <button id="btn-start-live" class="btn btn-success flex-1">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z"/></svg>
+                  Start Live Tap
+                </button>
+                <button id="btn-stop-live" class="btn btn-danger flex-1" disabled>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"><rect x="6" y="6" width="12" height="12"/></svg>
+                  Stop Live Tap
+                </button>
+              </div>
+              <p class="help-text">Passive mode reads packets without replying or sending RSTs. Outbound network sockets are physically absent in unidirectional setup.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filterable Flow Records Table -->
+        <div class="card margin-top">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Flow Records Analysis Report</h2>
+              <span id="analysis-summary-badge" class="badge-blue">Ready</span>
+            </div>
+            <div id="filter-count-info" class="text-muted text-sm">Showing 0 flows</div>
+          </div>
+
+          <!-- Filters Bar -->
+          <div class="filters-bar">
+            <div class="filter-group flex-2">
+              <label class="filter-label">Search Fields</label>
+              <input type="search" id="filter-text" class="form-control form-control-sm" placeholder="Search IP, port, reason, protocol...">
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">Min Packets</label>
+              <input type="number" id="filter-min-packets" class="form-control form-control-sm" placeholder="0">
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">Min Bytes</label>
+              <input type="number" id="filter-min-bytes" class="form-control form-control-sm" placeholder="0">
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">Min Prob %</label>
+              <input type="number" id="filter-min-prob" class="form-control form-control-sm" step="0.05" placeholder="0.0">
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">Status</label>
+              <select id="filter-status" class="form-control form-control-sm">
+                <option value="all">All Flows</option>
+                <option value="flagged">Flagged Only</option>
+                <option value="clear">Clear Only</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">Severity</label>
+              <select id="filter-severity" class="form-control form-control-sm">
+                <option value="all">All Severities</option>
+                <option value="high">High / Critical</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low / Normal</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">Anomaly Level</label>
+              <select id="filter-anomaly" class="form-control form-control-sm">
+                <option value="all">All Levels</option>
+                <option value="ok">OK</option>
+                <option value="watch">WATCH</option>
+                <option value="alert">ALERT</option>
+              </select>
+            </div>
+            <div class="filter-group align-end">
+              <button id="btn-clear-filters" class="btn btn-secondary btn-sm">Clear</button>
+            </div>
+          </div>
+
+          <!-- Table Container -->
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Time (UTC)</th>
+                  <th>Flag Status</th>
+                  <th>Severity</th>
+                  <th>Observed Source</th>
+                  <th>Observed Destination</th>
+                  <th>Proto</th>
+                  <th>Pkts</th>
+                  <th>Bytes</th>
+                  <th>Rate (f/s)</th>
+                  <th>XGB Score</th>
+                  <th>Kalman Score</th>
+                  <th>Fused Confidence</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="flows-table-body">
+                <!-- Dynamically generated rows -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ========================================== -->
+      <!-- TAB 3: KALMAN ANOMALY ENGINE -->
+      <!-- ========================================== -->
+      <div class="tab-content" id="tab-kalman">
+        
+        <div class="grid-1-2">
+          <!-- Kalman Explanation Card -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Kalman Bank Overview</h2>
+              <span class="badge-purple">Statistical Tracking</span>
+            </div>
+            <p class="card-text">
+              The Kalman Anomaly Engine maintains adaptive state estimations for sequential flow signals:
+            </p>
+            <ul class="feature-list">
+              <li><strong>Rate:</strong> Flow packet rate (packets per second)</li>
+              <li><strong>IAT:</strong> Mean Inter-Arrival Time between packets</li>
+              <li><strong>syn_count:</strong> Synchronize flag occurrence density</li>
+            </ul>
+            <div class="kalman-metrics-box">
+              <div class="metric-row">
+                <span>State Estimate (\(\hat{x}\)):</span>
+                <strong id="kalman-state-x">12.45</strong>
+              </div>
+              <div class="metric-row">
+                <span>Covariance Matrix (\(P\)):</span>
+                <strong id="kalman-cov-p">0.084</strong>
+              </div>
+              <div class="metric-row">
+                <span>Kalman Gain (\(K\)):</span>
+                <strong id="kalman-gain-k">0.312</strong>
+              </div>
+              <div class="metric-row">
+                <span>Current Anomaly Score:</span>
+                <strong id="kalman-current-score" class="text-amber">2.41</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Residual Drift & Anomaly Chart -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Residual Drift & Statistical Threshold</h2>
+              <div class="chart-legend">
+                <span class="legend-item"><span class="legend-dot dot-purple"></span> Residual Innovation (\(y = z - H\hat{x}\))</span>
+                <span class="legend-item"><span class="legend-dot dot-red"></span> Upper Control Limit (UCL = 3.0)</span>
+              </div>
+            </div>
+            <div class="chart-container">
+              <svg id="kalman-chart" viewBox="0 0 800 240" preserveAspectRatio="none">
+                <!-- SVG Kalmam Chart -->
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="card margin-top">
+          <h2 class="card-title">Multi-Metric Kalman State Bank</h2>
+          <div class="grid-3">
+            <div class="metric-card">
+              <div class="metric-card-title">Packet Rate (Rate)</div>
+              <div class="metric-card-value" id="k-rate-val">42.1 pps</div>
+              <div class="metric-card-status text-success">● In Expected Boundary</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-card-title">Inter-Arrival Time (IAT)</div>
+              <div class="metric-card-value" id="k-iat-val">0.024 s</div>
+              <div class="metric-card-status text-success">● In Expected Boundary</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-card-title">SYN Count Density</div>
+              <div class="metric-card-value" id="k-syn-val">1.0 / flow</div>
+              <div class="metric-card-status text-amber">▲ Slight Spike (WATCH)</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ========================================== -->
+      <!-- TAB 4: THREAT CLASSIFIER (XGBOOST) -->
+      <!-- ========================================== -->
+      <div class="tab-content" id="tab-classifier">
+        
+        <div class="grid-1-1">
+          <!-- Classifier Configuration & Performance -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">Hardened XGBoost Binary Classifier</h2>
+                <span class="badge-blue">Model Version 3.0</span>
+              </div>
+              <span class="offline-eval-tag">Offline Evaluation</span>
+            </div>
+            
+            <div class="metrics-grid">
+              <div class="metric-box">
+                <span class="metric-label">Macro F1-Score</span>
+                <span class="metric-val text-primary">0.990</span>
+              </div>
+              <div class="metric-box">
+                <span class="metric-label">ROC AUC</span>
+                <span class="metric-val text-primary">0.999</span>
+              </div>
+              <div class="metric-box">
+                <span class="metric-label">Precision</span>
+                <span class="metric-val text-primary">0.992</span>
+              </div>
+              <div class="metric-box">
+                <span class="metric-label">Recall</span>
+                <span class="metric-val text-primary">0.988</span>
+              </div>
+            </div>
+
+            <div class="confusion-matrix-box margin-top">
+              <h3 class="subsection-title">Confusion Matrix (Test Evaluation Set)</h3>
+              <table class="cm-table">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Pred: Benign</th>
+                    <th>Pred: Malicious</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>Actual: Benign</th>
+                    <td class="cm-cell cm-tn">90,840 (TN)</td>
+                    <td class="cm-cell cm-fp">220 (FP)</td>
+                  </tr>
+                  <tr>
+                    <th>Actual: Malicious</th>
+                    <td class="cm-cell cm-fn">180 (FN)</td>
+                    <td class="cm-cell cm-tp">91,061 (TP)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Feature Importance Breakdown -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Top 10 Feature Importances</h2>
+              <span class="badge-blue">Shapley / Gain Score</span>
+            </div>
+            <div class="feature-importance-list">
+              <div class="fi-item">
+                <div class="fi-label"><span>Rate (Packets / sec)</span> <span>0.284</span></div>
+                <div class="fi-bar-bg"><div class="fi-bar-fill" style="width: 88%;"></div></div>
+              </div>
+              <div class="fi-item">
+                <div class="fi-label"><span>IAT (Inter-arrival time)</span> <span>0.215</span></div>
+                <div class="fi-bar-bg"><div class="fi-bar-fill" style="width: 72%;"></div></div>
+              </div>
+              <div class="fi-item">
+                <div class="fi-label"><span>syn_count (SYN packets)</span> <span>0.174</span></div>
+                <div class="fi-bar-bg"><div class="fi-bar-fill" style="width: 58%;"></div></div>
+              </div>
+              <div class="fi-item">
+                <div class="fi-label"><span>Tot size (Total byte count)</span> <span>0.112</span></div>
+                <div class="fi-bar-bg"><div class="fi-bar-fill" style="width: 42%;"></div></div>
+              </div>
+              <div class="fi-item">
+                <div class="fi-label"><span>Variance (Packet size variance)</span> <span>0.091</span></div>
+                <div class="fi-bar-bg"><div class="fi-bar-fill" style="width: 32%;"></div></div>
+              </div>
+              <div class="fi-item">
+                <div class="fi-label"><span>Header_Length</span> <span>0.065</span></div>
+                <div class="fi-bar-bg"><div class="fi-bar-fill" style="width: 22%;"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ========================================== -->
+      <!-- TAB 5: THREAT COVERAGE MATRIX -->
+      <!-- ========================================== -->
+      <div class="tab-content" id="tab-coverage">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Threat Detection Coverage Matrix</h2>
+              <p class="card-subtitle">Unidirectional IP traffic detection scope across 6 threat vectors</p>
+            </div>
+          </div>
+
+          <div class="coverage-grid-cards">
+            <!-- 1. DDoS / DoS -->
+            <div class="coverage-card status-implemented">
+              <div class="coverage-status-tag tag-active">● Active Detector</div>
+              <h3 class="coverage-title">1. Volumetric DoS / DDoS</h3>
+              <p class="coverage-desc">Destination IP aggregation detecting high flow rates (>=1,000 pps) and multi-source syn floods.</p>
+              <div class="coverage-footer">
+                <span>Model: XGBoost + Aggregator</span>
+                <strong>Implemented</strong>
+              </div>
+            </div>
+
+            <!-- 2. Mythic Poseidon HTTP C2 -->
+            <div class="coverage-card status-implemented">
+              <div class="coverage-status-tag tag-active">● Active Detector</div>
+              <h3 class="coverage-title">2. Mythic Poseidon HTTP C2</h3>
+              <p class="coverage-desc">Specialized beaconing interval and header length anomaly detector for TQH Mythic Poseidon C2 agent.</p>
+              <div class="coverage-footer">
+                <span>Model: TQH Mythic XGBoost</span>
+                <strong>Implemented</strong>
+              </div>
+            </div>
+
+            <!-- 3. TLS / QUIC Anomaly -->
+            <div class="coverage-card status-uncovered">
+              <div class="coverage-status-tag tag-uncovered">⚠ Insufficient Data</div>
+              <h3 class="coverage-title">3. TLS / QUIC Anomaly</h3>
+              <p class="coverage-desc">Encrypted SNI / JA3 fingerprint analysis for malicious SSL certificates.</p>
+              <div class="coverage-footer">
+                <span>Status: No Dataset Samples</span>
+                <strong class="text-muted">Insufficient Data</strong>
+              </div>
+            </div>
+
+            <!-- 4. DNS Tunneling & DGA -->
+            <div class="coverage-card status-uncovered">
+              <div class="coverage-status-tag tag-uncovered">⚠ Insufficient Data</div>
+              <h3 class="coverage-title">4. DNS Tunneling / DGA</h3>
+              <p class="coverage-desc">Entropy calculation for high-frequency domain generation algorithms.</p>
+              <div class="coverage-footer">
+                <span>Status: No Dataset Samples</span>
+                <strong class="text-muted">Insufficient Data</strong>
+              </div>
+            </div>
+
+            <!-- 5. Botnet C2 Beaconing -->
+            <div class="coverage-card status-uncovered">
+              <div class="coverage-status-tag tag-uncovered">⚠ Insufficient Data</div>
+              <h3 class="coverage-title">5. Botnet Beaconing</h3>
+              <p class="coverage-desc">Periodic low-and-slow inter-arrival time pattern recognition.</p>
+              <div class="coverage-footer">
+                <span>Status: No Dataset Samples</span>
+                <strong class="text-muted">Insufficient Data</strong>
+              </div>
+            </div>
+
+            <!-- 6. Data Exfiltration -->
+            <div class="coverage-card status-uncovered">
+              <div class="coverage-status-tag tag-uncovered">⚠ Insufficient Data</div>
+              <h3 class="coverage-title">6. Data Exfiltration</h3>
+              <p class="coverage-desc">Asymmetric outbound byte transfer detection on high port channels.</p>
+              <div class="coverage-footer">
+                <span>Status: No Dataset Samples</span>
+                <strong class="text-muted">Insufficient Data</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- TAB 6: PIPELINE ARCHITECTURE & SCORING RULES -->
+      <!-- ========================================== -->
+      <div class="tab-content" id="tab-architecture">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">OneWayGuard End-to-End Pipeline Architecture</h2>
+            <span class="badge-blue">Passive Sensor Node</span>
+          </div>
+
+          <div class="pipeline-visual">
+            <div class="pipe-step">
+              <div class="pipe-num">1</div>
+              <div class="pipe-name">One-way Traffic</div>
+              <div class="pipe-detail">Optical Diode / PCAP Tap</div>
+            </div>
+            <div class="pipe-arrow">→</div>
+            <div class="pipe-step">
+              <div class="pipe-num">2</div>
+              <div class="pipe-name">Flow Records</div>
+              <div class="pipe-detail">5-tuple Assembly</div>
+            </div>
+            <div class="pipe-arrow">→</div>
+            <div class="pipe-step">
+              <div class="pipe-num">3</div>
+              <div class="pipe-name">Features</div>
+              <div class="pipe-detail">Rate, IAT, syn_count</div>
+            </div>
+            <div class="pipe-arrow">→</div>
+            <div class="pipe-step">
+              <div class="pipe-num">4</div>
+              <div class="pipe-name">Kalman Engine</div>
+              <div class="pipe-detail">Residual Anomaly Score</div>
+            </div>
+            <div class="pipe-arrow">→</div>
+            <div class="pipe-step">
+              <div class="pipe-num">5</div>
+              <div class="pipe-name">Classifier</div>
+              <div class="pipe-detail">XGBoost Malicious Prob</div>
+            </div>
+            <div class="pipe-arrow">→</div>
+            <div class="pipe-step">
+              <div class="pipe-num">6</div>
+              <div class="pipe-name">Fused Score</div>
+              <div class="pipe-detail">0.7 XGB + 0.3 Kalman</div>
+            </div>
+            <div class="pipe-arrow">→</div>
+            <div class="pipe-step step-dashboard">
+              <div class="pipe-num">7</div>
+              <div class="pipe-name">SOC Dashboard</div>
+              <div class="pipe-detail">Passive Alert Stream</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card margin-top">
+          <h2 class="card-title">Detection & Fusion Rules</h2>
+          <div class="rules-grid">
+            <div class="rule-box">
+              <h3>Fused Confidence Formula</h3>
+              <code>Confidence = 0.7 × P(XGBoost) + 0.3 × [1 - exp(-Anomaly / 3.0)]</code>
+              <p>Combines machine learning probability with statistical Kalman residual bounds to prevent single-model false positives.</p>
+            </div>
+            <div class="rule-box">
+              <h3>Volumetric DoS / DDoS Rules</h3>
+              <ul>
+                <li><strong>DoS:</strong> Single source IP → Destination with >= 1,000 packets & >= 1,000 pps.</li>
+                <li><strong>DDoS:</strong> >= 3 distinct source IPs → Destination with >= 1,000 packets & >= 1,000 pps.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- Flow Inspection Modal -->
+  <div class="modal-overlay" id="flow-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Flow Record Details Inspection</h3>
+        <button class="btn-close" id="btn-close-modal">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-body-content">
+        <!-- Dynamically rendered -->
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

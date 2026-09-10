@@ -1,0 +1,466 @@
+C:\Users\himanshu\AppData\Roaming\Python\Python310\site-packages\pandas\core\nanops.py:1016: RuntimeWarning: invalid value encountered in subtract
+  sqr = _ensure_numeric((avg - values) ** 2)
+=== SHAPE ===
+rows: 455641 cols: 42
+
+=== COLUMNS + DTYPES ===
+Header_Length                  float64      nulls=0
+Protocol Type                  int64        nulls=0
+Time_To_Live                   float64      nulls=0
+Rate                           float64      nulls=0
+fin_flag_number                float64      nulls=0
+syn_flag_number                float64      nulls=0
+rst_flag_number                float64      nulls=0
+psh_flag_number                float64      nulls=0
+ack_flag_number                float64      nulls=0
+ece_flag_number                float64      nulls=0
+cwr_flag_number                float64      nulls=0
+ack_count                      int64        nulls=0
+syn_count                      int64        nulls=0
+fin_count                      int64        nulls=0
+rst_count                      int64        nulls=0
+HTTP                           float64      nulls=0
+HTTPS                          float64      nulls=0
+DNS                            float64      nulls=0
+Telnet                         float64      nulls=0
+SMTP                           float64      nulls=0
+SSH                            float64      nulls=0
+IRC                            float64      nulls=0
+TCP                            float64      nulls=0
+UDP                            float64      nulls=0
+DHCP                           float64      nulls=0
+ARP                            float64      nulls=0
+ICMP                           float64      nulls=0
+IGMP                           float64      nulls=0
+IPv                            float64      nulls=0
+LLC                            float64      nulls=0
+Tot sum                        int64        nulls=0
+Min                            int64        nulls=0
+Max                            int64        nulls=0
+AVG                            float64      nulls=0
+Std                            float64      nulls=483
+Tot size                       float64      nulls=0
+IAT                            float64      nulls=0
+Number                         int64        nulls=0
+Variance                       float64      nulls=483
+Hash                           object       nulls=0
+MalwareFamily                  object       nulls=0
+Arch                           object       nulls=0
+
+=== HEAD (5 rows) ===
+   Header_Length  Protocol Type  Time_To_Live      Rate  fin_flag_number  syn_flag_number  rst_flag_number  psh_flag_number  ack_flag_number  ece_flag_number  cwr_flag_number  ack_count  syn_count  fin_count  rst_count  HTTP  HTTPS  DNS  Telnet  SMTP  SSH  IRC  TCP  UDP  DHCP  ARP  ICMP  IGMP  IPv  LLC  Tot sum  Min  Max    AVG         Std  Tot size       IAT  Number      Variance                                                              Hash MalwareFamily Arch
+0            7.2             17          61.2  8.706623              0.0              0.0              0.0              0.0              0.0              0.0              0.0          0          0          0          0   0.0    0.0  0.0     0.0   0.0  0.0  0.0  0.0  0.9   0.3  0.0   0.1   0.0  1.0  1.0     1684   90  342  168.4  120.106619     168.4  0.114855      10  14425.600000  85f4c8ed3d1640f8b9ddc5722b225eaf4e75f78d43b7a31b41a5e81895de143e        Benign  x86
+1            4.8             17          64.0  6.182197              0.0              0.0              0.0              0.0              0.0              0.0              0.0          0          0          0          0   0.0    0.0  0.0     0.0   0.0  0.0  0.0  0.0  0.6   0.1  0.0   0.4   0.0  1.0  1.0     1030   64  342  103.0   85.120829     103.0  0.213177      10   7245.555556  85f4c8ed3d1640f8b9ddc5722b225eaf4e75f78d43b7a31b41a5e81895de143e        Benign  x86
+2            4.8             17          51.2  4.553498              0.0              0.0              0.0              0.0              0.0              0.0              0.0          0          0          0          0   0.0    0.0  0.0     0.0   0.0  0.0  0.0  0.0  0.6   0.4  0.2   0.2   0.0  0.8  0.8     1764   42  342  176.4  143.501607     176.4  0.219616      10  20592.711111  85f4c8ed3d1640f8b9ddc5722b225eaf4e75f78d43b7a31b41a5e81895de143e        Benign  x86
+3            3.2              1          51.2  5.793830              0.0              0.0              0.0              0.0              0.0              0.0              0.0          0          0          0          0   0.0    0.0  0.0     0.0   0.0  0.0  0.0  0.0  0.4   0.1  0.2   0.4   0.0  0.8  0.8      986   42  342   98.6   87.823307      98.6  0.172604      10   7712.933333  85f4c8ed3d1640f8b9ddc5722b225eaf4e75f78d43b7a31b41a5e81895de143e        Benign  x86
+4            5.6             17          64.0  3.760603              0.0              0.0              0.0              0.0              0.0              0.0              0.0          0          0          0          0   0.0    0.0  0.0     0.0   0.0  0.0  0.0  0.0  0.7   0.3  0.0   0.3   0.0  1.0  1.0     1558   64  342  155.8  129.070007     155.8  0.269501      10  16659.066667  85f4c8ed3d1640f8b9ddc5722b225eaf4e75f78d43b7a31b41a5e81895de143e        Benign  x86
+
+=== PER-COLUMN QUICK SUMMARY ===
+
+--- Header_Length | unique=200 ---
+count    455641.000000
+mean         15.269155
+std           5.784149
+min           0.000000
+25%          10.400000
+50%          16.400000
+75%          20.000000
+max          40.000000
+
+--- Protocol Type | unique=5 ---
+Protocol Type
+6     321209
+17    121099
+1      11900
+0       1432
+2          1
+
+--- Time_To_Live | unique=1662 ---
+count    455641.000000
+mean         65.300040
+std          12.894665
+min           0.000000
+25%          60.100000
+50%          64.000000
+75%          64.000000
+max         243.000000
+
+--- Rate | unique=375273 ---
+count    4.556410e+05
+mean              inf
+std               NaN
+min      5.923331e-01
+25%      8.805259e+00
+50%      2.096682e+01
+75%      2.107045e+02
+max               inf
+
+--- fin_flag_number | unique=9 ---
+fin_flag_number
+0.000000    447243
+0.100000      7326
+0.200000       961
+0.300000        97
+0.400000         8
+0.166667         2
+0.500000         2
+0.250000         1
+0.111111         1
+
+--- syn_flag_number | unique=33 ---
+count    455641.000000
+mean          0.519414
+std           0.387310
+min           0.000000
+25%           0.100000
+50%           0.600000
+75%           0.900000
+max           1.000000
+
+--- rst_flag_number | unique=27 ---
+count    455641.000000
+mean          0.081760
+std           0.167077
+min           0.000000
+25%           0.000000
+50%           0.000000
+75%           0.100000
+max           1.000000
+
+--- psh_flag_number | unique=11 ---
+psh_flag_number
+0.000000    450042
+0.100000      4495
+0.200000       667
+0.300000       183
+0.400000       101
+0.500000        83
+0.600000        35
+0.700000        18
+0.800000         8
+0.900000         7
+0.166667         2
+
+--- ack_flag_number | unique=27 ---
+count    455641.000000
+mean          0.080380
+std           0.164783
+min           0.000000
+25%           0.000000
+50%           0.000000
+75%           0.100000
+max           1.000000
+
+--- ece_flag_number | unique=2 ---
+ece_flag_number
+0.0    455615
+0.1        26
+
+--- cwr_flag_number | unique=2 ---
+cwr_flag_number
+0.0    455611
+0.1        30
+
+--- ack_count | unique=11 ---
+ack_count
+0     330695
+1      41505
+2      21713
+3      17670
+4      16012
+5      13272
+6       8604
+7       4222
+8       1441
+9        374
+10       133
+
+--- syn_count | unique=11 ---
+syn_count
+0     103938
+10     99807
+9      36580
+7      33318
+8      32661
+6      30378
+5      25634
+2      24458
+1      23681
+3      22627
+4      22559
+
+--- fin_count | unique=6 ---
+fin_count
+0    447243
+1      7332
+2       959
+3        97
+4         8
+5         2
+
+--- rst_count | unique=11 ---
+rst_count
+0     330438
+1      40992
+2      21350
+3      17424
+4      15878
+5      13851
+6       9125
+7       4621
+8       1533
+9        383
+10        46
+
+--- HTTP | unique=29 ---
+count    455641.000000
+mean          0.053309
+std           0.172460
+min           0.000000
+25%           0.000000
+50%           0.000000
+75%           0.000000
+max           1.000000
+
+--- HTTPS | unique=21 ---
+count    455641.000000
+mean          0.009603
+std           0.064334
+min           0.000000
+25%           0.000000
+50%           0.000000
+75%           0.000000
+max           1.000000
+
+--- DNS | unique=21 ---
+count    455641.000000
+mean          0.013658
+std           0.076799
+min           0.000000
+25%           0.000000
+50%           0.000000
+75%           0.000000
+max           1.000000
+
+--- Telnet | unique=33 ---
+count    455641.000000
+mean          0.464904
+std           0.381555
+min           0.000000
+25%           0.000000
+50%           0.500000
+75%           0.800000
+max           1.000000
+
+--- SMTP | unique=1 ---
+SMTP
+0.0    455641
+
+--- SSH | unique=9 ---
+SSH
+0.0    455612
+0.6         7
+0.1         6
+0.4         5
+0.3         5
+0.7         2
+0.8         2
+0.5         1
+0.2         1
+
+--- IRC | unique=1 ---
+IRC
+0.0    455641
+
+--- TCP | unique=33 ---
+count    455641.000000
+mean          0.607709
+std           0.374572
+min           0.000000
+25%           0.300000
+50%           0.700000
+75%           0.900000
+max           1.000000
+
+--- UDP | unique=33 ---
+count    455641.000000
+mean          0.294666
+std           0.347804
+min           0.000000
+25%           0.000000
+50%           0.100000
+75%           0.500000
+max           1.000000
+
+--- DHCP | unique=33 ---
+count    455641.000000
+mean          0.255450
+std           0.311754
+min           0.000000
+25%           0.000000
+50%           0.100000
+75%           0.400000
+max           1.000000
+
+--- ARP | unique=26 ---
+count    455641.000000
+mean          0.036314
+std           0.077854
+min           0.000000
+25%           0.000000
+50%           0.000000
+75%           0.000000
+max           1.000000
+
+--- ICMP | unique=26 ---
+count    455641.000000
+mean          0.061124
+std           0.123172
+min           0.000000
+25%           0.000000
+50%           0.000000
+75%           0.100000
+max           1.000000
+
+--- IGMP | unique=8 ---
+IGMP
+0.000000    455198
+0.100000       296
+0.200000       140
+0.222222         2
+0.250000         2
+0.333333         1
+0.166667         1
+0.111111         1
+
+--- IPv | unique=26 ---
+count    455641.000000
+mean          0.963686
+std           0.077854
+min           0.000000
+25%           1.000000
+50%           1.000000
+75%           1.000000
+max           1.000000
+
+--- LLC | unique=26 ---
+count    455641.000000
+mean          0.963686
+std           0.077854
+min           0.000000
+25%           1.000000
+50%           1.000000
+75%           1.000000
+max           1.000000
+
+--- Tot sum | unique=3128 ---
+count    455641.000000
+mean       1321.478480
+std         921.977806
+min          42.000000
+25%         560.000000
+50%         900.000000
+75%        1756.000000
+max       14660.000000
+
+--- Min | unique=87 ---
+count    455641.000000
+mean         65.488248
+std          59.541140
+min          42.000000
+25%          54.000000
+50%          54.000000
+75%          54.000000
+max        1466.000000
+
+--- Max | unique=766 ---
+count    455641.000000
+mean        239.002702
+std         146.424201
+min          42.000000
+25%          74.000000
+50%         342.000000
+75%         342.000000
+max        1514.000000
+
+--- AVG | unique=3237 ---
+count    455641.000000
+mean        133.228223
+std          92.978515
+min          42.000000
+25%          56.000000
+50%          90.800000
+75%         181.200000
+max        1466.000000
+
+--- Std | unique=21276 ---
+count    455158.000000
+mean         70.894564
+std          63.261374
+min           0.000000
+25%           0.000000
+50%          91.073597
+75%         123.993548
+max         772.029821
+
+--- Tot size | unique=3237 ---
+count    455641.000000
+mean        133.228223
+std          92.978515
+min          42.000000
+25%          56.000000
+50%          90.800000
+75%         181.200000
+max        1466.000000
+
+--- IAT | unique=382156 ---
+count    455641.000000
+mean          0.118129
+std           0.162768
+min           0.000006
+25%           0.005760
+50%           0.053853
+75%           0.130796
+max           2.394461
+
+--- Number | unique=10 ---
+Number
+10    451605
+1        483
+6        460
+9        451
+5        450
+2        446
+7        444
+3        438
+8        434
+4        430
+
+--- Variance | unique=22828 ---
+count    455158.000000
+mean       9028.031820
+std       17053.020905
+min           0.000000
+25%           0.000000
+50%        8294.400000
+75%       15374.400000
+max      596030.044444
+
+--- Hash | unique=4475 ---
+count                                                455641
+unique                                                 4475
+top       b8a73eb7b5c8e1fac31ec8628481fc819387ad242e8e3f...
+freq                                                   2192
+
+--- MalwareFamily | unique=6 ---
+MalwareFamily
+Mirai        319808
+Benign        82622
+Unknown       31531
+DarkNexus      9938
+Gafgyt         7666
+Generic        4076
+
+--- Arch | unique=1 ---
+Arch
+x86    455641

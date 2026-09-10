@@ -1,0 +1,24 @@
+=== DOMAIN/DGA CLASSIFIER ===
+train_file       : C:\Users\himanshu\Downloads\dataset\6508640_extracted\train_combined_multiclass.csv.gz
+test_file        : C:\Users\himanshu\Downloads\dataset\6508640_extracted\test_combined_multiclass.csv.gz
+train_rows       : 2482810
+test_rows        : 620703
+train_classes    : {0: 944106, 1: 1532263, 2: 6441}
+batches          : 100
+features         : char ngrams 2-5, hashing dimension 262144
+accuracy         : 0.9293
+macro_f1         : 0.7886
+weighted_f1      : 0.9298
+elapsed_seconds  : 65.51
+rows_per_second  : 47373.92
+
+--- per-class report ---
+              precision    recall  f1-score   support
+
+           0     0.8540    0.9845    0.9146    236072
+           1     0.9889    0.8973    0.9409    383072
+           2     0.6773    0.4092    0.5102      1559
+
+    accuracy                         0.9293    620703
+   macro avg     0.8400    0.7637    0.7886    620703
+weighted avg     0.9368    0.9293    0.9298    620703

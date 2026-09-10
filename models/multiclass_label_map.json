@@ -1,0 +1,5 @@
+{
+  "Benign": 0,
+  "Botnet": 1,
+  "Mirai": 2
+}

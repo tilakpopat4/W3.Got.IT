@@ -1,0 +1,16 @@
+################  STAGE 4 HARDENING  ################
+rows before dedup : 455641
+rows after  dedup : 455304
+
+--- A) hardened model (all features, regularized) ---
+[ALL] acc=0.9833 f1=0.9897 auc=0.9986 precision=0.9991 recall=0.9805
+[ALL] top features: TCP=0.55, syn_count=0.19, Header_Length=0.12, syn_flag_number=0.04, Telnet=0.03, rst_count=0.01, HTTP=0.01, ack_count=0.01
+
+--- B) robustness check: WITHOUT 'TCP' feature ---
+[NO_TCP] acc=0.9833 f1=0.9897 auc=0.9985 precision=0.9991 recall=0.9805
+[NO_TCP] top features: syn_count=0.46, Protocol Type=0.16, syn_flag_number=0.14, Header_Length=0.13, Telnet=0.04, rst_count=0.03, rst_flag_number=0.02, ack_count=0.01
+
+=== VERDICT ===
+with TCP    : acc=0.9833 f1=0.9897 auc=0.9986
+without TCP : acc=0.9833 f1=0.9897 auc=0.9985
+robustness  : STRONG - keeps f1=0.990 even without TCP (only 0.000 drop). Not a single-feature trick.
