@@ -1,0 +1,11 @@
+{
+  "callbacks": 1000,
+  "elapsed_seconds": 2.283243,
+  "packets_per_second": 437.9735315075968,
+  "active_flows": 1000,
+  "flows_processed": 1000,
+  "flows_flagged": 1000,
+  "packets_ignored_by_filter": 0,
+  "measurement_scope": "live_session_on_packet_callback",
+  "source": "in_memory_scapy_packets"
+}

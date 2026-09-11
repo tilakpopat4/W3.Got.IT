@@ -1,0 +1,57 @@
+:root { color-scheme: dark; font-family: Inter, Segoe UI, sans-serif; background: #08111f; color: #e5edf7; }
+* { box-sizing: border-box; }
+body { margin: 0; background: radial-gradient(circle at top right, #123052, #08111f 48%); }
+.shell { max-width: 1400px; margin: auto; padding: 42px 28px 64px; }
+header, .section-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; }
+.eyebrow { color: #61d6b3; font-size: 12px; letter-spacing: .16em; font-weight: 700; }
+h1 { font-size: clamp(32px, 5vw, 58px); margin: 8px 0; }
+h2 { margin: 0; }
+.muted { color: #91a4bb; }
+.badge, .safe { border: 1px solid #2b8a78; color: #77e3c3; border-radius: 999px; padding: 8px 12px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.card, .metric { background: rgba(15, 30, 50, .88); border: 1px solid #1e3957; border-radius: 14px; box-shadow: 0 12px 34px #0003; }
+.controls { display: grid; grid-template-columns: 1.5fr 1fr .7fr .7fr auto; gap: 14px; align-items: end; margin-top: 34px; padding: 20px; }
+label { color: #a9bdd2; font-size: 12px; font-weight: 700; display: grid; gap: 8px; }
+input, select, button { width: 100%; border: 1px solid #2b4969; border-radius: 8px; background: #0a1a2d; color: #e5edf7; padding: 11px; }
+button { background: #19a77d; border-color: #19a77d; color: #031a15; font-weight: 800; cursor: pointer; }
+button:hover { background: #5de0b8; }
+.status { min-height: 24px; color: #9eb5cc; }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 20px 0; }
+.metric { padding: 18px; display: grid; gap: 8px; }
+.metric span, .metric small { color: #91a4bb; font-size: 12px; }
+.metric strong { font-size: 29px; }
+.hidden { display: none; }
+#details { padding: 22px; }
+.section-heading { margin-bottom: 18px; align-items: center; }
+.table-wrap { overflow: auto; max-height: 620px; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+th, td { border-bottom: 1px solid #1e3957; text-align: left; padding: 11px 8px; white-space: nowrap; vertical-align: top; }
+th { color: #79a0c4; position: sticky; top: 0; background: #10243c; }
+.danger { color: #ff8d89; font-weight: 800; }
+.normal { color: #73d6b1; }
+.live-controls { grid-template-columns: 1.5fr auto auto 2fr; margin-top: 14px; }
+.stop { background: #a94750; border-color: #a94750; color: white; }
+.live-help { margin: 0; align-self: center; font-size: 12px; }
+.attack-summary { margin: 12px 0 18px; padding: 12px; border: 1px solid #785d32; color: #f1ca7b; border-radius: 8px; font-size: 13px; }
+.alert-list { display: grid; gap: 8px; max-height: 280px; overflow: auto; }
+.alert-item { border: 1px solid #6e3940; border-left: 4px solid #ff8d89; border-radius: 8px; padding: 10px 12px; background: #241b29; }
+.alert-item div { display: flex; justify-content: space-between; gap: 12px; color: #ffaaa5; }
+.alert-item p { margin: 6px 0; color: #e5edf7; font-size: 13px; }
+.alert-item small { color: #91a4bb; }
+.filter-panel { display: grid; grid-template-columns: 2fr repeat(4, 1fr) repeat(2, .9fr) auto; gap: 10px; margin-bottom: 8px; }
+.filter-panel label { font-size: 11px; }
+.secondary { background: #18314d; border-color: #315273; color: #d7e7f7; }
+.help { margin-top: 18px; padding: 22px; }
+.help h2 { margin-bottom: 14px; }
+.help-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.help h3 { color: #77e3c3; margin-bottom: 6px; }
+.help p { color: #91a4bb; line-height: 1.5; margin-top: 0; }
+.scoring-guide { margin-top: 18px; padding: 22px; }
+.scoring-guide li { color: #b6c7d9; line-height: 1.6; margin: 6px 0; }
+.scoring-guide code { color: #77e3c3; background: #0a1a2d; padding: 2px 5px; border-radius: 4px; }
+.coverage-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.coverage-grid span { padding: 9px 11px; border-radius: 7px; font-size: 12px; }
+.implemented { color: #8ce6c8; background: #12372f; border: 1px solid #276e5a; }
+.planned { color: #f0c77b; background: #3c2e18; border: 1px solid #785d32; }
+@media (max-width: 900px) { .controls { grid-template-columns: 1fr 1fr; } .grid { grid-template-columns: 1fr 1fr; } header { display: block; } .badge { display: inline-block; margin-top: 16px; } }
+@media (max-width: 900px) { .filter-panel, .help-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 540px) { .controls, .grid, .filter-panel, .help-grid { grid-template-columns: 1fr; } }

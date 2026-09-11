@@ -1,0 +1,7 @@
+=== STAGE 3 KALMAN SELF-TEST (benign vs Mirai) ===
+metrics: ['Rate', 'IAT', 'syn_count'] log:['Rate']
+benign mean=0.984 p95=2.426
+attack mean=1.181 p95=2.436
+benign %>=3.0=3.6% attack %>=3.0=2.8%
+benign %>=6.0=0.8% attack %>=6.0=0.6%
+separation=0.197

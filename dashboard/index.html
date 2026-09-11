@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIH-145 Passive PCAP Dashboard</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <p class="eyebrow">SIH-145 / READ-ONLY MONITOR</p>
+        <h1>Passive packet analysis</h1>
+        <p class="muted">Upload a capture and inspect the exact flow decisions made by the pipeline.</p>
+      </div>
+      <span class="badge">NO BLOCKING ACTIONS</span>
+    </header>
+
+    <section class="card controls">
+      <label>PCAP file<input id="pcap" type="file" accept=".pcap,.pcapng"></label>
+      <label>Model<select id="model">
+        <option value="generic">Generic flow model</option>
+        <option value="mythic_c2">Mythic HTTP C2 model</option>
+      </select></label>
+      <label>Flag threshold<input id="threshold" type="number" min="0" max="1" step="0.01" value="0.50"></label>
+      <label>Packet limit<input id="limit" type="number" min="1" max="100000" step="100" value="10000"></label>
+      <button id="run">Analyze capture</button>
+    </section>
+
+    <section class="card controls live-controls">
+      <label>Live interface
+        <input id="interface" list="interfaces" type="text" placeholder="\Device\NPF_{...}">
+        <datalist id="interfaces"></datalist>
+      </label>
+      <label>Website IP filter (optional)
+        <input id="target-ips" type="text" placeholder="IPv4 or IPv6 addresses, comma-separated">
+      </label>
+      <button id="start-live">Start live analysis</button>
+      <button id="stop-live" class="stop" disabled>Stop live analysis</button>
+      <p class="muted live-help">Choose an <b>active</b> Wi-Fi/Ethernet adapter. Live mode reads packets only; Npcap and capture permission are required.</p>
+    </section>
+
+    <p id="status" class="status">Choose a PCAP to begin.</p>
+
+    <section id="summary" class="grid hidden">
+      <div class="metric"><span>Packets observed</span><strong id="packets">-</strong></div>
+      <div class="metric"><span>Flows processed</span><strong id="processed">-</strong></div>
+      <div class="metric"><span>Flows flagged</span><strong id="flagged">-</strong></div>
+      <div class="metric"><span>Flag rate</span><strong id="rate">-</strong></div>
+      <div class="metric"><span>Throughput</span><strong id="throughput">-</strong><small id="throughput-unit">flows/sec</small></div>
+      <div class="metric"><span>Active flows</span><strong id="active-flows">-</strong></div>
+    </section>
+
+    <section id="alert-feed" class="card hidden">
+      <div class="section-heading">
+        <div><h2>Live alert feed</h2><p class="muted">Newest standardized alerts received over WebSocket.</p></div>
+        <button id="clear-alerts" class="secondary">Clear alert feed</button>
+      </div>
+      <p id="alert-count" class="muted">No live alerts received.</p>
+      <div id="alerts" class="alert-list"></div>
+    </section>
+
+    <section id="details" class="card hidden">
+      <div class="section-heading"><div><h2>Analysis report</h2><p id="model-label" class="muted"></p><p id="algorithm-label" class="muted"></p></div><span id="safety" class="safe">Metadata only</span></div>
+      <div id="attack-summary" class="attack-summary"></div>
+      <div class="filter-panel">
+        <label>Search all fields<input id="filter-text" type="search" placeholder="IP, port, protocol, reason, feature, time..."></label>
+        <label>Minimum packets<input id="filter-min-packets" type="number" min="0" placeholder="0"></label>
+        <label>Minimum bytes<input id="filter-min-bytes" type="number" min="0" placeholder="0"></label>
+        <label>Minimum probability<input id="filter-min-probability" type="number" min="0" max="1" step="0.01" placeholder="0"></label>
+        <label>Status<select id="filter-status"><option value="all">All statuses</option><option value="flagged">Flagged only</option><option value="clear">Clear only</option></select></label>
+        <label>Severity<select id="filter-severity"><option value="all">All severities</option><option>high</option><option>medium</option><option>low</option></select></label>
+        <label>Anomaly<select id="filter-anomaly"><option value="all">All anomaly levels</option><option>ok</option><option>watch</option><option>alert</option></select></label>
+        <button id="clear-filters" class="secondary">Clear filters</button>
+      </div>
+      <p id="filter-count" class="muted"></p>
+      <div class="table-wrap"><table><thead><tr>
+        <th>Time (UTC)</th><th>Flag</th><th>Threat</th><th>Severity</th><th>Why</th><th>Probability</th><th>Observed source</th><th>Observed destination</th><th>Packets</th><th>Bytes</th><th>Rate</th><th>Kalman</th><th>Top evidence</th>
+      </tr></thead><tbody id="flows"></tbody></table></div>
+    </section>
+    <section class="card help">
+      <h2>How to use the detector</h2>
+      <div class="help-grid">
+        <div><h3>Generic flow model</h3><p>Broad benign-versus-malicious flow model for general traffic. It is not a dedicated DDoS labeler.</p></div>
+        <div><h3>Mythic HTTP C2 model</h3><p>Specialized for TQH Mythic Poseidon HTTP command-and-control patterns. Do not use it as a general website verdict.</p></div>
+        <div><h3>Live interface</h3><p>Scapy reads packets from the selected Npcap interface, updates flows in memory, and refreshes this report every second. It never sends or blocks packets.</p></div>
+      </div>
+    </section>
+    <section class="card scoring-guide">
+      <h2>How a flow becomes flagged</h2>
+      <p class="muted">A flag is a review signal, not proof that an attack occurred.</p>
+      <ol>
+        <li><b>Feature extraction:</b> packet metadata is converted to flow features such as packet count, bytes, rate, timing, TCP flags, and packet-size statistics.</li>
+        <li><b>Classifier score:</b> XGBoost returns a malicious probability from 0 to 1. The flow is flagged when <code>probability >= threshold</code>.</li>
+        <li><b>Kalman score:</b> the filter compares rate, inter-arrival time, and SYN count with expected behavior and reports an anomaly score/level.</li>
+        <li><b>Fused confidence:</b> <code>0.7 × classifier probability + 0.3 × bounded Kalman anomaly</code>.</li>
+        <li><b>Severity:</b> a possible volumetric event can raise severity; otherwise a flagged flow is normally medium severity.</li>
+        <li><b>DoS/DDoS:</b> this requires destination aggregation. Current conservative rule: at least 1,000 packets and 1,000 packets/sec; DDoS additionally needs at least 3 distinct sources.</li>
+      </ol>
+      <h3>Detection coverage</h3>
+      <div class="coverage-grid">
+        <span class="implemented">Implemented: generic malicious flow</span>
+        <span class="implemented">Implemented: Mythic HTTP C2 model</span>
+        <span class="implemented">Implemented: packet-volume DoS/DDoS evidence</span>
+        <span class="implemented">Implemented: live SYN/UDP flood evidence</span>
+        <span class="implemented">Implemented: live port-scan specialist</span>
+        <span class="implemented">Implemented: live DNS/DGA metadata evidence</span>
+        <span class="implemented">Implemented: live botnet beacon timing</span>
+        <span class="implemented">Implemented: live TLS/QUIC metadata anomaly</span>
+        <span class="implemented">Implemented: live directional exfiltration evidence</span>
+        <span class="implemented">Implemented: live WebSocket alert stream</span>
+      </div>
+    </section>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>

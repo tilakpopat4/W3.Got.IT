@@ -1,0 +1,31 @@
+################  MODEL AUDIT REPORT  ################
+dataset rows=455641 features=37
+
+=== 1. DATA INTEGRITY ===
+remaining NaN cells      : 0
+remaining inf cells      : 0
+constant feature columns : none
+duplicate feature rows   : 337 (0.1%)
+  note: duplicates across train/test can inflate scores (leakage risk).
+
+=== 2. STAGE 4 ROBUSTNESS: 5-fold CV (binary Benign-vs-Malicious) ===
+CV F1  (5-fold)  : mean=0.9906  std=0.0005  folds=[0.9902 0.9915 0.9906 0.9907 0.9901]
+CV AUC (5-fold)  : mean=0.9983  std=0.0001
+stability verdict: STABLE
+top feature      : TCP = 0.900
+leakage check    : WARN single feature dominates
+warnings raised  : 0
+
+=== 3. STAGE 3 KALMAN: unit + controlled-burst tests ===
+NaN-safe update          : OK
+warmup suppresses scores : OK
+steady baseline max score: 1.71
+injected-burst peak score: 45.57
+burst triggers HARD alert: OK (detected)
+burst >> baseline         : OK
+
+=== SUMMARY ===
+Stage4 data clean (no nan/inf) : YES
+Stage4 constant cols to drop   : none
+Stage4 duplicate-row leakage   : CHECK (337 dupes)
+Stage3 Kalman burst detection  : WORKS

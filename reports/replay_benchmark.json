@@ -1,0 +1,15 @@
+{
+  "rows_processed": 10000,
+  "alerts": 30,
+  "elapsed_seconds": 5.7134531,
+  "flows_per_second": 1750.2550252840967,
+  "estimated_mbps": 3.5820833269619192,
+  "per_flow_latency_ms": {
+    "p50": 0.4446,
+    "p95": 0.8721,
+    "p99": 1.8675280000000005,
+    "max": 134.2895
+  },
+  "measurement_scope": "inference_and_kalman_after_parquet_load",
+  "input": "C:\\Users\\himanshu\\Downloads\\projects\\SIH-145\\data\\pcap_clean.parquet"
+}

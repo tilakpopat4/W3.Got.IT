@@ -1,0 +1,25 @@
+=== TQH MYTHIC HTTP C2 CLASSIFIER ===
+rows_total       : 34676
+rows_train       : 21628
+rows_test        : 13048
+train_captures   : ['C_i1800_j30', 'C_i1800_j70', 'C_i300_j0', 'C_i300_j30', 'C_i300_j70', 'C_i30_j0', 'C_i30_j30', 'C_i30_j70', 'C_i3600_j70']
+test_captures    : ['C_i1800_j0', 'C_i3600_j0', 'C_i3600_j30']
+matched_labels   : {'benign_external': 12838, 'malicious_c2': 12789, 'benign': 9049}
+accuracy         : 0.7236
+precision        : 0.3985
+recall           : 0.7821
+f1               : 0.5279
+roc_auc          : 0.8470
+
+--- classification report ---
+              precision    recall  f1-score   support
+
+      benign       0.93      0.71      0.80     10469
+malicious_c2       0.40      0.78      0.53      2579
+
+    accuracy                           0.72     13048
+   macro avg       0.66      0.75      0.67     13048
+weighted avg       0.82      0.72      0.75     13048
+--- confusion matrix (rows=true, cols=pred) ---
+[[7424 3045]
+ [ 562 2017]]
