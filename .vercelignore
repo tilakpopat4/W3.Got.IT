@@ -1,0 +1,15 @@
+.git
+.venv
+data/
+docs/
+reports/
+scripts/
+postman/
+.postman/
+*.zip
+*.parquet
+*.csv
+*.joblib
+models/xgb_threat.json
+models/xgb_multiclass_clean.json
+models/xgb_binary.json

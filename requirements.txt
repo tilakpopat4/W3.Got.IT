@@ -1,13 +1,6 @@
-pandas>=2.0
 numpy>=1.24
-pyarrow>=14.0
-scikit-learn>=1.3
 xgboost>=2.0
-imbalanced-learn>=0.11
-filterpy>=1.4.5
 pydantic>=2.0
-joblib>=1.3
-matplotlib>=3.7
 scapy>=2.6
 fastapi>=0.115
 uvicorn>=0.30
