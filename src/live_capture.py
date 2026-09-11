@@ -13,7 +13,10 @@ from scapy.sendrecv import AsyncSniffer
 from scapy.layers.dns import DNS, DNSQR
 from scapy.layers.inet import ICMP, IP, TCP, UDP
 from scapy.layers.inet6 import IPv6, ICMPv6EchoRequest, ICMPv6EchoReply
-from xgboost import XGBClassifier
+try:
+    from xgboost import XGBClassifier
+except ImportError:
+    XGBClassifier = Any  # type: ignore
 
 from src.feature_extractor import flow_to_features
 from src.flow_records import FlowRecord

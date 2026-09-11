@@ -14,12 +14,14 @@ from fastapi import FastAPI, File, Form, HTTPException, UploadFile, WebSocket
 from starlette.websockets import WebSocketDisconnect
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from xgboost import XGBClassifier
-from scapy.all import get_if_list
-from scapy.arch.windows import get_windows_if_list
+try:
+    from scapy.arch.windows import get_windows_if_list
+except ImportError:
+    get_windows_if_list = None
 
 from src import config
 from src.alert_schema import alert_from_row
+from src.fast_xgb import FastXGBPredictor
 from src.feature_extractor import flow_to_features
 from src.flow_records import read_pcap
 from src.kalman_engine import KalmanBank
@@ -43,16 +45,21 @@ app = FastAPI(title="SIH-145 Passive PCAP Dashboard")
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
-def load_model(model_name: str) -> tuple[XGBClassifier, list[str], str]:
+def load_model(model_name: str) -> tuple[object, list[str], str]:
     paths = MODEL_OPTIONS.get(model_name)
     if paths is None:
         raise HTTPException(status_code=400, detail=f"Unknown model: {model_name}")
     model_path, feature_path, label = paths
     if not model_path.exists() or not feature_path.exists():
         raise HTTPException(status_code=503, detail=f"Model artifacts missing for {model_name}")
-    model = XGBClassifier()
-    model.load_model(str(model_path))
-    return model, json.loads(feature_path.read_text(encoding="utf-8")), label
+    feature_cols = json.loads(feature_path.read_text(encoding="utf-8"))
+    try:
+        from xgboost import XGBClassifier
+        model = XGBClassifier()
+        model.load_model(str(model_path))
+    except (ImportError, Exception):
+        model = FastXGBPredictor(model_path, feature_cols)
+    return model, feature_cols, label
 
 
 def analyze(
